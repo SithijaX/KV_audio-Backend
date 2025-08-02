@@ -3,6 +3,10 @@ import mongoose from "mongoose"
 import deviceRouter from "./Routes/deviceRoutes.js";
 import userRouter from "./Routes/userRouter.js";
 import jwt from 'jsonwebtoken';
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 let app = express();
 app.use(express.json());
@@ -14,7 +18,7 @@ app.use((req,res,next)=>{
         token = token.replace("Bearer ", "");
         console.log(token);
 
-        jwt.verify(token, "KV_Secret", (err, decoded)=>{
+        jwt.verify(token, process.env.jwtSecret, (err, decoded)=>{
             if(err){
                 console.log(decoded);
                 return res.status(401).json({message: "Unauthorized access!"});
@@ -26,7 +30,7 @@ app.use((req,res,next)=>{
     next();
 });
 
-mongoose.connect("mongodb+srv://admin:12345@c1.6fthtvf.mongodb.net/?retryWrites=true&w=majority&appName=C1");
+mongoose.connect(process.env.mongoUrl);
 
 let connection = mongoose.connection;
 connection.once("open", ()=>{

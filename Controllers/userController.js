@@ -1,7 +1,7 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-
+import dotenv from "dotenv";
 
 export async function registerUser(req,res){
     const {firstName, lastName, email, password, role, phone, address} = req.body;
@@ -75,7 +75,7 @@ export async function login(req, res) {
             password: user.password,
             name: `${user.firstName} ${user.lastName}`,
             role: user.role
-        }, 'KV_Secret', {expiresIn: '1h'});
+        }, process.env.jwtSecret, {expiresIn: '1h'});
 
         return res.status(202).json({
             msg : "User logining successfully! ",
