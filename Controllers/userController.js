@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 
+dotenv.config();
+
 export async function registerUser(req,res){
     const {firstName, lastName, email, password, role, phone, address} = req.body;
 

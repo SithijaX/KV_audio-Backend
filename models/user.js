@@ -30,7 +30,12 @@ const userSchema = new mongoose.Schema({
     phone : {
         type : String,
         required : true
-    }
+    },
+    profileImage:{
+        type : String,
+        default : "https://www.w3schools.com/howto/img_avatar.png",
+        required : true
+    },
 
 });
 
