@@ -76,3 +76,24 @@ export async function deleteReview(req, res) {
         }
     }
 }
+
+export async function approveReview(req, res) {
+    const { email } = req.params;
+    if (!req.user || req.user.role !== "admin") {
+        return res.status(403).json({ message: "You are not authorized to approve reviews!" });
+    }
+
+    try {
+        const updatedReview = await Review.findOneAndUpdate(
+            { email },
+            { isApproved: true },
+            { new: true }
+        );
+        if (!updatedReview) {
+            return res.status(404).json({ message: "Review not found!" });
+        }
+        return res.status(200).json({ message: "Review approved successfully!" });
+    } catch (err) {
+        return res.status(500).json({ message: "Error approving review!" });
+    }
+}
