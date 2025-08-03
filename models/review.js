@@ -17,12 +17,16 @@ const reviewSchema = new mongoose.Schema({
         required: true},
     date : {
         type: Date,
-        required: true,
         default: Date.now},
     profileImage: {
         type: String,
         default: "https://www.w3schools.com/howto/img_avatar.png",
-        required: true} 
+        required: true
+    } ,
+    isApproved: { 
+        type: Boolean,
+        default: false
+    }
 });
 
 const Review = mongoose.model("Review", reviewSchema);

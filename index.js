@@ -55,3 +55,13 @@ app.use("/api/user", userRouter);
 app.listen(5000, ()=>{
     console.log("Server is running on port 5000!");
 })
+
+
+//Sample users 
+//customer :
+/*  "email": "chuti@yahoo.com",
+    "password": "123" */
+
+//admin:
+/*  "email": "siththa@gmail.com",
+    "password": "123" */
