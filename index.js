@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Middleware to verify JWT token
 app.use((req,res,next)=>{
-    let token = req.header("Authorization")
+    let token = req.header("Authorization");
 
     if(token!=null){
         token = token.replace("Bearer ", "");
@@ -29,9 +29,12 @@ app.use((req,res,next)=>{
             }   
           
             req.user = decoded;
+            console.log( req.user);
+            next();
         })
-    }
+    } else{
     next();
+}
 });
 
 // Connect to MongoDB

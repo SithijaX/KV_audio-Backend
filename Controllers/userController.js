@@ -55,7 +55,7 @@ export async function getUsers(req,res){
 }
 
 export async function login(req, res) {
-    const {email, password} = req.body;
+    const {email, password, firstName, lastName} = req.body;
 
     try{
         //find user by email
@@ -75,7 +75,8 @@ export async function login(req, res) {
         const token = jwt.sign({
             email: user.email,
             password: user.password,
-            name: `${user.firstName} ${user.lastName}`,
+            firstName: user.firstName,
+            lastName: user.lastName,
             role: user.role
         }, process.env.jwtSecret, {expiresIn: '1h'});
 
