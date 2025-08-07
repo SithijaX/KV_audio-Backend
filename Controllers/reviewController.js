@@ -52,30 +52,19 @@ export async function deleteReview(req, res) {
         return;
     }
 
-    if (req.user.role === "admin") {
+    // Only allow admin or the owner of the review to delete
+    if (req.user.role === "admin" || email === req.user.email) {
         try {
-        const deletedReview = await Review.findOneAndDelete({ email });
-        if (!deletedReview) {
-            return res.status(404).json({ message: "Review not found!" });
-        }
-        return res.status(200).json({ message: "Review deleted successfully!" });
-    } catch (err) {
-        return res.status(500).json({ message: "Error deleting review!" });
-    }
-    } else{
-        if(email === req.user.email){
-            try {
-                const deletedReview = await Review.findOneAndDelete({ email });
-                if (!deletedReview) {
-                    return res.status(404).json({ message: "Review not found!" });
-                }
-                return res.status(200).json({ message: "Review deleted successfully!" });
-            } catch (err) {
-                return res.status(500).json({ message: "Error deleting review!" });
+            const deletedReview = await Review.findOneAndDelete({ email });
+            if (!deletedReview) {
+                return res.status(404).json({ message: "Review not found!" });
             }
-        } else {
-            return res.status(403).json({ message: "You are not authorized to delete this review!" });
+            return res.status(200).json({ message: "Review deleted successfully!" });
+        } catch (err) {
+            return res.status(500).json({ message: "Error deleting review!" });
         }
+    } else {
+        return res.status(403).json({ message: "You are not authorized to delete this review!" });
     }
 }
 
