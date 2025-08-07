@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const deviceSchema = mongoose.Schema({
+const itemSchema = mongoose.Schema({
     key:{
         type : String,
         required: true,
@@ -13,7 +13,8 @@ const deviceSchema = mongoose.Schema({
     Availability: {
         type: String,
         required: true,
-        default: "In Stock"
+        default: "In Stock",
+        enum: ["In Stock", "Out of Stock", "Pre-order"]
     },
     price: {
         type: Number,
@@ -39,6 +40,6 @@ const deviceSchema = mongoose.Schema({
 })
 
 //create a model
-let Device = mongoose.model("Device_info", deviceSchema);
+let item = mongoose.model("items_info", itemSchema);
 
-export default Device;
+export default item;

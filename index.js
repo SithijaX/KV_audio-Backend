@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 //import route files
 import reviewRouter from "./Routes/reviewRouter.js";
-import deviceRouter from "./Routes/deviceRoutes.js";
+import itemRouter from "./Routes/itemRouter.js";
 import userRouter from "./Routes/userRouter.js";
 
 
@@ -50,7 +50,7 @@ app.get("/", (req, res) => {
     res.send("Welcome to KV Audio API!");
 });
 app.use("/api/review", reviewRouter);
-app.use("/api/device", deviceRouter);
+app.use("/api/item", itemRouter);
 app.use("/api/user", userRouter);
 
 
