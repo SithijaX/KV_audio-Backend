@@ -62,9 +62,9 @@ app.listen(5000, ()=>{
 
 //Sample users 
 //customer :
-/*  "email": "chuti@yahoo.com",
-    "password": "123" */
+/*  "email": "sudu@yahoo.com",
+    "password": "12345" */
 
 //admin:
-/*  "email": "siththa@gmail.com",
-    "password": "123" */
+/*  "email": "Purple2@tempmail.com",
+    "password": "12345" */

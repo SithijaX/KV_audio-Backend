@@ -45,13 +45,25 @@ export async function registerUser(req,res){
 
 
 export async function getUsers(req,res){
-    User.find().then((result)=>{
+    if(!req.user || req.user.role !== "admin"){
+        res.status(401).json({
+            msg: "you are not authorized to view user info!"
+        })
+    }
+
+    try{
+        const userList = await User.find();
+        res.status(200).json(userList)
+    }catch{
+        res.status(500).json({msg:"userList fetching Failed!"});
+    }
+   /* User.find().then((result)=>{
         res.json(result);
     }).catch(()=>{
         res.status(500).json({
             msg : "error !"
         })
-    })
+    }) */
 }
 
 export async function login(req, res) {
