@@ -56,6 +56,7 @@ export async function addItems(req,res){
         })
     }
 
+// handling single item addition (uncomment if needed)
  /*   try {
         let newItem = new item(req.body);
         await newItem.save();
