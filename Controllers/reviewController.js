@@ -12,8 +12,10 @@ export async function addReview(req,res){
     data.email = req.user.email;
     data.profileImage = req.user.profileImage;
 
-    const newReview = new Review(data);
+    // Set isApproved to false before saving
+    data.isApproved = false;
 
+    const newReview = new Review(data);
     const savedReview = await newReview.save();
 
     if(savedReview){
