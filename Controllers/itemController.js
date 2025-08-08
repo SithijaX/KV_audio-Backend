@@ -87,15 +87,17 @@ export async function addItems(req,res){
 
 export async function updateItem(req,res){
     // Check if the user is authenticated
-    if(isAdmin(req)){
-        return res.status(403).json({msg: "You are not authorized to update products!"});
+    if (!isAdmin(req)) {
+        return res.status(403).json({
+            msg: "🚫 Access Denied! Only admins can update products. 🚫"
+        });
     }
 
     try {
             const key = req.params.key;
             const updateData = req.body;
 
-            const updatedItem = await item.updateone({key: key}, updateData);
+            const updatedItem = await item.updateOne({key: key}, updateData);
 
             res.status(200).json({
                 msg: "Item updated successfully 👍",
@@ -110,4 +112,38 @@ export async function updateItem(req,res){
     }
 
 
+}
+
+
+export async function deleteItem(req,res){
+    // Check if the user is authenticated
+    if (!isAdmin(req)) {
+        return res.status(403).json({
+            msg: "🚫 Access Denied! Only admins can delete products. 🚫"
+        });
+    }
+
+    try {
+        const key = req.params.key;
+        const deletedItem = await item.deleteOne({key: key});
+
+
+        if (deletedItem.deletedCount === 0) {
+            return res.status(404).json({
+                msg: "Item not found or already deleted."
+            });
+        }
+
+        res.status(200).json({
+            msg: "Item deleted successfully 👍",
+            item: deletedItem
+        });
+
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Error deleting item 😕",
+            error: error.message
+        }); 
+    }
 }
