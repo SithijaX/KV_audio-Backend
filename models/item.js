@@ -25,8 +25,9 @@ const itemSchema = mongoose.Schema({
         required: true
     },
     image: {
-        type: String,
-        required: true
+        type: [String],
+        required: true,
+        default: "https://example.com/default-image.jpg"
     },
     demensions: {
         type: String,
