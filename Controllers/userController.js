@@ -67,7 +67,7 @@ export async function getUsers(req,res){
 }
 
 export async function login(req, res) {
-    const {email, password, firstName, lastName} = req.body;
+    const {email,phone, password, firstName, lastName} = req.body;
 
     try{
         //find user by email
@@ -86,6 +86,7 @@ export async function login(req, res) {
         //create JWT token
         const token = jwt.sign({
             email: user.email,
+            phone: user.phone,
             password: user.password,
             firstName: user.firstName,
             lastName: user.lastName,
@@ -98,6 +99,7 @@ export async function login(req, res) {
                 id: user.id,
                 name: `${user.firstName} ${user.lastName}`,
                 email: user.email,
+                phone: user.phone,
                 role: user.role
             }, token
         })
