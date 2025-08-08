@@ -1,10 +1,21 @@
 import item from "../models/item.js";
+import { isAdmin } from "./userController.js"; // Importing the isAdmin function
+
+// Function to get items
 
 export async function getItems(req,res){
 
     try {
-        const foundItems = await item.find();
-        res.json(foundItems);
+        if(isAdmin(req)){
+            // If the user is an admin, return all items
+            const foundItems = await item.find();
+            res.json(foundItems);
+            return;
+        } else {
+            const foundItems = await item.find({Availability: "In Stock"});
+            res.json(foundItems);
+            return;
+        }
 
     } catch (error) {
         res.status(500).json({
@@ -71,4 +82,32 @@ export async function addItems(req,res){
             error: error.message
         });
     }         */
+}
+
+
+export async function updateItem(req,res){
+    // Check if the user is authenticated
+    if(isAdmin(req)){
+        return res.status(403).json({msg: "You are not authorized to update products!"});
+    }
+
+    try {
+            const key = req.params.key;
+            const updateData = req.body;
+
+            const updatedItem = await item.updateone({key: key}, updateData);
+
+            res.status(200).json({
+                msg: "Item updated successfully 👍",
+                item: updatedItem
+            });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Error updating item 😕",
+            error: error.message
+        });
+    }
+
+
 }

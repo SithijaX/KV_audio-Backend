@@ -108,3 +108,11 @@ export async function login(req, res) {
         })
     }
 }
+
+// Function to check if the user is an admin
+export function isAdmin(req){
+    if(req.user && req.user.role === "admin"){
+        return true;
+    }
+    return false;
+}
