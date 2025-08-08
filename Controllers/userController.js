@@ -116,3 +116,11 @@ export function isAdmin(req){
     }
     return false;
 }
+
+export function isCustomer(req){
+    if(req.user && req.user.role === "customer"){
+        return true;
+    }else {
+        return false;
+    }
+}

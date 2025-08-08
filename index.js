@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import reviewRouter from "./Routes/reviewRouter.js";
 import itemRouter from "./Routes/itemRouter.js";
 import userRouter from "./Routes/userRouter.js";
+import inquiryRouter from "./Routes/inquiryRouter.js";
 
 
 dotenv.config();
@@ -52,7 +53,13 @@ app.get("/", (req, res) => {
 app.use("/api/review", reviewRouter);
 app.use("/api/item", itemRouter);
 app.use("/api/user", userRouter);
+app.use("/api/inquiry", inquiryRouter);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: "Internal Server Error" });
+});
 
 // Start the server
 app.listen(5000, ()=>{
