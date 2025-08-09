@@ -1,5 +1,5 @@
 import Inquiry from "../models/inquiry.js";
-import { isCustomer } from "./userController.js";
+import { isAdmin, isCustomer } from "./userController.js";
 
 export async function addInquiry(req, res) {
 
@@ -52,5 +52,41 @@ export async function addInquiry(req, res) {
 
 //view inquiries
 export async function viewInquiries(req,res){
-    
+    if(!req.user){
+        return res.status(401).json({
+            "message": "Please login and try again !"
+        })
+    }
+
+    if(isCustomer(req)){
+        try {
+            const inquiries = await Inquiry.find({ email: req.user.email });
+            res.status(200).json({
+                message: "Inquiries retrieved successfully!",
+                inquiries
+            });
+        } catch (error) {
+            console.error("Error retrieving inquiries:", error);
+            res.status(500).json({
+                message: "🚫 Failed to retrieve inquiries!",
+                error: error.message
+            }); 
+        }
+    }
+
+    if(isAdmin(req)){
+        try {
+            const inquiries = await Inquiry.find();
+            res.status(200).json({
+                message: "Inquiries retrieved successfully!",
+                inquiries
+            });
+        } catch (error) {
+            console.error("Error retrieving inquiries:", error);
+            res.status(500).json({
+                message: "🚫 Failed to retrieve inquiries!",
+                error: error.message
+            }); 
+        }
+    }
 }
