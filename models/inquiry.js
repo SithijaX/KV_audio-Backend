@@ -18,10 +18,6 @@ const inquirySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    message:{
-        type: String,
-        required: true
-    },
     response:{
         type: String,
         required: false,

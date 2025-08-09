@@ -39,11 +39,18 @@ export async function addInquiry(req, res) {
             }
         })
     } catch (error) {
+        console.error("Inquiry submission error:", error); // Log the error for debugging
         res.status(500).json({
-            message: "🚫 Inquiry submission failed!"
+            message: "🚫 Inquiry submission failed!",
+            error: error.message // Optionally send error message for debugging (remove in production)
         })
     }
 
 
 
+}
+
+//view inquiries
+export async function viewInquiries(req,res){
+    
 }
