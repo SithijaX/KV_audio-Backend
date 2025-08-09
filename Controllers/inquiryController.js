@@ -150,21 +150,61 @@ export async function deleteInquiry(req, res) {
     }
 }
 
+//Update Inquiry
 
+export async function updateInquiry(req,res) {
+    if (!isLoged(req)){
+        return res.status(401).json({ message: "Unauthorized access !" });
+    }
 
-/*try {
-        const inquiryId = req.params.id;
-        const deletedInquiry = await Inquiry.findByIdAndDelete(inquiryId);
+    if (isAdmin(req)) {
+        try {
+            const inquiryId = req.params.id;
+            const updatedData = req.body;
 
-        if (!deletedInquiry) {
-            return res.status(404).json({ message: "Inquiry not found!" });
+            const updatedInquiry = await Inquiry.findByIdAndUpdate(inquiryId, updatedData, { new: true });
+
+            if (!updatedInquiry) {
+                return res.status(404).json({ message: "❌ Inquiry not found!" });
+            }
+
+            res.status(200).json({
+                message: "✅ Inquiry updated successfully!",
+                inquiry: updatedInquiry
+            });
+        } catch (error) {
+            console.error("Error updating inquiry:", error);
+            res.status(500).json({
+                message: "🚫 Failed to update inquiry!",
+                error: error.message
+            });
         }
 
-        res.status(200).json({ message: "Inquiry deleted successfully!" });
-    } catch (error) {
-        console.error("Error deleting inquiry:", error);
-        res.status(500).json({
-            message: "🚫 Failed to delete inquiry!",
-            error: error.message
-        });
-    }*/
+
+        //for customer
+        if (isCustomer(req)) {
+            try {
+                const inquiryId = req.params.id;
+                const updatedData = req.body;
+
+                const updatedInquiry = await Inquiry.findOneAndUpdate({ id: inquiryId, email: req.user.email }, 
+                    { message: updatedData.message }, { new: true });
+
+                if (!updatedInquiry) {
+                    return res.status(404).json({ message: "❌ Inquiry not found!" });
+                }
+
+                res.status(200).json({
+                    message: "✅ Inquiry updated successfully!",
+                    inquiry: updatedInquiry
+                });
+            } catch (error) {
+                console.error("Error updating inquiry:", error);
+                res.status(500).json({
+                    message: "🚫 Failed to update inquiry!",
+                    error: error.message
+                });
+            }
+        }
+    }
+}
