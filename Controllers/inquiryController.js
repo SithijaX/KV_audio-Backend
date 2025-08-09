@@ -162,7 +162,7 @@ export async function updateInquiry(req,res) {
             const inquiryId = req.params.id;
             const updatedData = req.body;
 
-            const updatedInquiry = await Inquiry.findByIdAndUpdate(inquiryId, updatedData, { new: true });
+            const updatedInquiry = await Inquiry.findOneAndUpdate({ id: inquiryId }, updatedData, { new: true });
 
             if (!updatedInquiry) {
                 return res.status(404).json({ message: "❌ Inquiry not found!" });
@@ -179,13 +179,17 @@ export async function updateInquiry(req,res) {
                 error: error.message
             });
         }
-
+    }
 
         //for customer
         if (isCustomer(req)) {
             try {
                 const inquiryId = req.params.id;
                 const updatedData = req.body;
+
+                if (req.user.email !== updatedData.email) {
+                    return res.status(403).json({ message: "🚫 You can only update your own inquiries!" });
+                }
 
                 const updatedInquiry = await Inquiry.findOneAndUpdate({ id: inquiryId, email: req.user.email }, 
                     { message: updatedData.message }, { new: true });
@@ -206,5 +210,5 @@ export async function updateInquiry(req,res) {
                 });
             }
         }
-    }
+    
 }
