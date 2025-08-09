@@ -1,5 +1,5 @@
 import Inquiry from "../models/inquiry.js";
-import { isAdmin, isCustomer } from "./userController.js";
+import { isAdmin, isCustomer, isLoged } from "./userController.js";
 
 export async function addInquiry(req, res) {
 
@@ -90,3 +90,81 @@ export async function viewInquiries(req,res){
         }
     }
 }
+
+
+//delete inquiry
+export async function deleteInquiry(req, res) {
+    if (!isLoged(req)) {
+        return res.status(403).json({ message: "You are not authorized to delete inquiries!" });
+    }
+
+    const inquiryId = req.params.id;
+
+    //For Customer Services
+
+    try {
+        // Find inquiry by custom id field
+        const inquiry = await Inquiry.findOne({ id: inquiryId });
+
+        if (!inquiry) {
+            return res.status(404).json({ message: "❌ Inquiry not found!" });
+        }
+
+        // Only allow customers to delete their own inquiries
+        if (isCustomer(req) && inquiry.email !== req.user.email) {
+            return res.status(403).json({ message: "🚫 You can only delete your own inquiries!" });
+        }
+
+        await Inquiry.deleteOne({ id: inquiryId });
+
+        return res.status(200).json({
+            message: "✅ Inquiry deleted successfully!"
+        });
+    } catch (error) {
+        console.error("Error deleting inquiry:", error);
+        return res.status(500).json({
+            message: "🚫 Failed to delete inquiry!",
+            error: error.message
+        });
+    }
+
+
+    //For Admin
+    if (isAdmin(req)) {
+        try {
+            const inquiry = await Inquiry.findOne({ id: inquiryId });
+            if (!inquiry) {
+                return res.status(404).json({ message: "❌ Inquiry not found!" });
+            }
+            await Inquiry.deleteOne({ id: inquiryId });
+            return res.status(200).json({
+                message: "✅ Inquiry deleted successfully!"
+            });
+        } catch (error) {
+            console.error("Error deleting inquiry:", error);
+            return res.status(500).json({
+                message: "🚫 Failed to delete inquiry!",
+                error: error.message
+            });
+        }
+    }
+}
+
+
+
+/*try {
+        const inquiryId = req.params.id;
+        const deletedInquiry = await Inquiry.findByIdAndDelete(inquiryId);
+
+        if (!deletedInquiry) {
+            return res.status(404).json({ message: "Inquiry not found!" });
+        }
+
+        res.status(200).json({ message: "Inquiry deleted successfully!" });
+    } catch (error) {
+        console.error("Error deleting inquiry:", error);
+        res.status(500).json({
+            message: "🚫 Failed to delete inquiry!",
+            error: error.message
+        });
+    }*/

@@ -126,3 +126,10 @@ export function isCustomer(req){
         return false;
     }
 }
+
+export function isLoged(req){
+    if(req.user){
+        return true;
+    }
+    return false;
+}

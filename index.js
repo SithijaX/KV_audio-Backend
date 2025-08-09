@@ -72,6 +72,10 @@ app.listen(5000, ()=>{
 /*  "email": "sudu@yahoo.com",
     "password": "12345" */
 
+/* cus 2 :
+    "email": "sample@gmail.com",
+    "password": "123" */
+
 //admin:
 /*  "email": "Purple2@tempmail.com",
     "password": "12345" */
